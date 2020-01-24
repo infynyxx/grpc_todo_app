@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>grpc.todo</groupId>
     <artifactId>grpc-todo</artifactId>
@@ -83,7 +84,8 @@
                     <source>11</source>
                     <target>11</target>
                     <compilerArgs>
-                        <arg>--add-opens</arg><arg>java.base/jdk.internal.misc=ALL-UNNAMED</arg>
+                        <arg>--add-opens</arg>
+                        <arg>java.base/jdk.internal.misc=ALL-UNNAMED</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
@@ -93,11 +95,13 @@
                 <version>2.22.2</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <org.mockito.internal.simulateJava11>true</org.mockito.internal.simulateJava11>
+                        <org.mockito.internal.simulateJava11>true
+                        </org.mockito.internal.simulateJava11>
                     </systemPropertyVariables>
                     <argLine>
                         <!-- https://github.com/pingidentity/java9-token-binding-negotiation/blob/master/pom.xml#L52 -->
-                        --add-exports java.base/sun.security.ssl=ALL-UNNAMED --add-exports java.base/jdk.internal.util=ALL-UNNAMED
+                        --add-exports java.base/sun.security.ssl=ALL-UNNAMED --add-exports
+                        java.base/jdk.internal.util=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>
@@ -184,9 +188,13 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
                     <protoSourceRoot>../proto</protoSourceRoot>
                 </configuration>
                 <executions>
