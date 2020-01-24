@@ -7,9 +7,11 @@ import io.grpc.stub.StreamObserver;
 
 import java.util.Map;
 
-import todos.TodoServiceGrpc;
-import todos.Todos.GetTodoRequest;
-import todos.Todos.Todo;
+import todos.v1.TodoServiceGrpc;
+import todos.v1.Todos.DeleteTodoRequest;
+import todos.v1.Todos.DeleteTodoResponse;
+import todos.v1.Todos.GetTodoRequest;
+import todos.v1.Todos.Todo;
 
 public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
 
@@ -47,6 +49,18 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
     final Todo todoWithId = request.toBuilder().setId(id).build();
     map.put(id, todoWithId);
     responseObserver.onNext(todoWithId);
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void deleteTodo(DeleteTodoRequest request,
+          StreamObserver<DeleteTodoResponse> responseObserver) {
+    final boolean deleted = map.remove(request.getId()) != null;
+    responseObserver.onNext(DeleteTodoResponse
+            .newBuilder()
+            .setDeleted(deleted)
+            .setId(request.getId())
+            .build());
     responseObserver.onCompleted();
   }
 }

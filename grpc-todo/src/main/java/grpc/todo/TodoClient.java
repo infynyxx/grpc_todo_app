@@ -8,9 +8,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import todos.TodoServiceGrpc;
-import todos.Todos.GetTodoRequest;
-import todos.Todos.Todo;
+import todos.v1.TodoServiceGrpc;
+import todos.v1.Todos.GetTodoRequest;
+import todos.v1.Todos.Todo;
 
 public class TodoClient {
   final String host;
