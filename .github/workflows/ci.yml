@@ -29,7 +29,7 @@ jobs:
     - name: Build with Maven
       run: mvn clean package --file grpc-todo/pom.xml
 
-    name: Install Protoc
+    - name: Install Protoc
       uses: Arduino/actions/setup-protoc@master
       with:
         version: '3.11.x'
