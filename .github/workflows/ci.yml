@@ -8,10 +8,28 @@ jobs:
     runs-on: ubuntu-latest
     container: azul/zulu-openjdk:11.0.5
 
-    steps:
+    steps:    
+    - name: Install essential commands
+      run: |
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update
+        apt-get install -y curl git-all
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
+
+    - name: Download Maven 3.6.3
+      run: |
+        MAVEN_VERSION=3.6.3
+        curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
+        tar -xz -C /usr/local -f /tmp/maven.tar.gz
+        ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven
+        rm -rf /tmp/maven.tar.gz
+        mkdir -p ~/.m2
+        echo 'export M2_HOME=/usr/local/apache-maven' >> $BASH_ENV
+        echo 'export MAVEN_OPTS=-Xmx2048m' >> $BASH_ENV
+        echo 'export PATH=$M2_HOME/bin:$PATH' >> $BASH_ENV      
+
+    - name: Print maven version
+      run: mvn -version
     - name: Run a multi-line script
       run: |
         echo Add other actions to build,
