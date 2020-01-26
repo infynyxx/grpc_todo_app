@@ -20,10 +20,9 @@ jobs:
       run: |
         uname -a
         java -version
-        MAVEN_VERSION=3.6.3
-        mkdir -p /tmp
+        MAVEN_VERSION=3.6.3                
         curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
-        ls -lh /tmp/
+        mkdir -p /usr/local
         tar -xz -C /usr/local -f /tmp/maven.tar.gz
         ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven
         rm -rf /tmp/maven.tar.gz
