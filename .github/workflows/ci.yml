@@ -22,15 +22,14 @@ jobs:
         pwd
         java -version
         whoami
-        MAVEN_VERSION=3.6.3 
-        USER=`whoami`               
+        MAVEN_VERSION=3.6.3        
         curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
         
-        tar -xz -C /home/root -f /tmp/maven.tar.gz
-        ln -sf ~/apache-maven-${MAVEN_VERSION} ~/apache-maven
+        tar -xz -C /tmp -f /tmp/maven.tar.gz
+        ln -sf /tmp/apache-maven-${MAVEN_VERSION} /tmp/apache-maven
         rm -rf /tmp/maven.tar.gz
         
-        echo 'export M2_HOME=/home/$USER/apache-maven' >> $BASH_ENV
+        echo 'export M2_HOME=/tmp/apache-maven' >> $BASH_ENV
         echo 'export MAVEN_OPTS=-Xmx2048m' >> $BASH_ENV
         echo 'export PATH=$M2_HOME/bin:$PATH' >> $BASH_ENV      
 
