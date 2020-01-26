@@ -24,7 +24,7 @@ jobs:
       run: mvn -version
 
     - name: Download maven dependencies
-      run: mvn dependency:resolve-plugins dependency:go-offline          
+      run: mvn dependency:resolve-plugins dependency:go-offline --file grpc-todo/pom.xml
 
     - name: Build with Maven
       run: mvn clean package --file grpc-todo/pom.xml
