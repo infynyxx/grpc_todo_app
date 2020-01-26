@@ -34,6 +34,9 @@ jobs:
       with:
         version: '3.11.x'
 
+    - name: Print protoc version
+      run: protoc --version
+
     - name: Get yarn cache
       id: yarn-cache
       run: echo "::set-output name=dir::$(yarn cache dir)"
