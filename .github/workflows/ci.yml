@@ -28,7 +28,7 @@ jobs:
         tar -xz -C ~/ -f /tmp/maven.tar.gz
         ln -sf ~/apache-maven-${MAVEN_VERSION} ~/apache-maven
         rm -rf /tmp/maven.tar.gz
-        mkdir -p ~/.m2
+        
         echo 'export M2_HOME=/home/$USER/apache-maven' >> $BASH_ENV
         echo 'export MAVEN_OPTS=-Xmx2048m' >> $BASH_ENV
         echo 'export PATH=$M2_HOME/bin:$PATH' >> $BASH_ENV      
