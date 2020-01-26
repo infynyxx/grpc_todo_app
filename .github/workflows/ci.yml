@@ -25,7 +25,7 @@ jobs:
         MAVEN_VERSION=3.6.3        
         curl -v -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
         echo 'uncompressing /tmp/maven.tar.gz'
-        tar -xz -C /tmp -f /tmp/maven.tar.gz
+        sudo tar -xz -C /tmp -f /tmp/maven.tar.gz
         ln -sf /tmp/apache-maven-${MAVEN_VERSION} /tmp/apache-maven
         rm -rf /tmp/maven.tar.gz
         
