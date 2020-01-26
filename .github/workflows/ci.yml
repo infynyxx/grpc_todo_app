@@ -20,14 +20,16 @@ jobs:
       run: |
         uname -a
         java -version
-        MAVEN_VERSION=3.6.3                
+        whoami
+        MAVEN_VERSION=3.6.3 
+        USER=`whoami`               
         curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
-        mkdir -p /usr/local
-        tar -xz -C /usr/local -f /tmp/maven.tar.gz
-        ln -sf /usr/local/apache-maven-${MAVEN_VERSION} /usr/local/apache-maven
+        
+        tar -xz -C ~/ -f /tmp/maven.tar.gz
+        ln -sf ~/apache-maven-${MAVEN_VERSION} ~/apache-maven
         rm -rf /tmp/maven.tar.gz
         mkdir -p ~/.m2
-        echo 'export M2_HOME=/usr/local/apache-maven' >> $BASH_ENV
+        echo 'export M2_HOME=/home/$USER/apache-maven' >> $BASH_ENV
         echo 'export MAVEN_OPTS=-Xmx2048m' >> $BASH_ENV
         echo 'export PATH=$M2_HOME/bin:$PATH' >> $BASH_ENV      
 
