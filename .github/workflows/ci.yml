@@ -19,13 +19,14 @@ jobs:
     - name: Download Maven 3.6.3
       run: |
         uname -a
+        pwd
         java -version
         whoami
         MAVEN_VERSION=3.6.3 
         USER=`whoami`               
         curl -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
         
-        tar -xz -C ~/ -f /tmp/maven.tar.gz
+        tar -xz -C /home/root -f /tmp/maven.tar.gz
         ln -sf ~/apache-maven-${MAVEN_VERSION} ~/apache-maven
         rm -rf /tmp/maven.tar.gz
         
