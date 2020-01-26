@@ -5,39 +5,20 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-    container: azul/zulu-openjdk:11.0.5
+    runs-on: ubuntu-latest    
 
-    steps:    
-    - name: Install essential commands
-      run: |
-        export DEBIAN_FRONTEND=noninteractive
-        apt-get update
-        apt-get install -y curl git-all
+    steps:        
     - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '11.0.5'
 
-    - name: Download Maven 3.6.3
-      run: |
-        uname -a
-        pwd
-        java -version
-        whoami
-        MAVEN_VERSION=3.6.3        
-        curl -v -sSL -o /tmp/maven.tar.gz http://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz
-        echo 'mkdir -p /tmp/'
-        mkdir -p /tmp/
-        echo 'tar -xz -C /tmp -f /tmp/maven.tar.gz'
-        tar -xz -C /tmp -f /tmp/maven.tar.gz
-        ln -sf /tmp/apache-maven-${MAVEN_VERSION} /tmp/apache-maven
-        rm -rf /tmp/maven.tar.gz
-        
-        echo 'export M2_HOME=/tmp/apache-maven' >> $BASH_ENV
-        echo 'export MAVEN_OPTS=-Xmx2048m' >> $BASH_ENV
-        echo 'export PATH=$M2_HOME/bin:$PATH' >> $BASH_ENV      
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
 
-    - name: Print maven version
-      run: mvn -version
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - name: Build with Maven
+      run: mvn package --file grpc-todo/pom.xml
