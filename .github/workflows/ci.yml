@@ -28,3 +28,8 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean package --file grpc-todo/pom.xml
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: cd client && yarn install && yarn build
