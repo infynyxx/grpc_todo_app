@@ -4,6 +4,8 @@ on: [push]
 
 jobs:
   build:
+
+    runs-on: ubuntu-latest
     container: azul/zulu-openjdk:11.0.5
 
     steps:
