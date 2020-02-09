@@ -1,5 +1,6 @@
 package grpc.todo;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
 import io.grpc.Status;
@@ -11,11 +12,12 @@ import todos.v1.TodoServiceGrpc;
 import todos.v1.Todos.DeleteTodoRequest;
 import todos.v1.Todos.DeleteTodoResponse;
 import todos.v1.Todos.GetTodoRequest;
+import todos.v1.Todos.ListTodoRequest;
 import todos.v1.Todos.Todo;
 
 public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
 
-  private final Map<Integer, Todo> map = Maps.newHashMap();
+  private final Map<Integer, Todo> map = Maps.newConcurrentMap();
 
   @Override
   public void getTodoById(GetTodoRequest request, StreamObserver<Todo> responseObserver) {
@@ -61,6 +63,16 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
             .setDeleted(deleted)
             .setId(request.getId())
             .build());
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void listTodos(ListTodoRequest request,
+          StreamObserver<Todo> responseObserver) {
+    ImmutableMap<Integer, Todo> copyMap = ImmutableMap.copyOf(map);
+    copyMap.forEach((key, value) -> {
+      responseObserver.onNext(value);
+    });
     responseObserver.onCompleted();
   }
 }
