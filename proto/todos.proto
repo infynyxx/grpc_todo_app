@@ -6,6 +6,7 @@ message Todo {
   int32 id = 1;
   string content = 2;
   bool finished = 3;
+  int64 touched_ts = 4;
 }
 
 message GetTodoRequest {
@@ -22,7 +23,7 @@ message DeleteTodoResponse {
 }
 
 message ListTodoRequest {
-  
+
 }
 
 service TodoService {
@@ -31,4 +32,4 @@ service TodoService {
   rpc createTodo(Todo) returns (Todo) {};
   rpc deleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse) {};
   rpc listTodos(ListTodoRequest) returns (stream Todo) {};
-} 
+}

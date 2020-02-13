@@ -4,6 +4,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TodoServer {
@@ -16,8 +17,11 @@ public class TodoServer {
   }
 
   void start() throws IOException, InterruptedException {
-    final Server server =
-        ServerBuilder.forPort(port).addService(new TodoServiceGrpcImpl()).build().start();
+    final Server server = ServerBuilder
+            .forPort(port)
+            .addService(new TodoServiceGrpcImpl())
+            .build()
+            .start();
     logger.info(String.format("Started server at port=%d", port));
     Runtime.getRuntime()
         .addShutdownHook(
@@ -26,15 +30,15 @@ public class TodoServer {
                   try {
                     server.shutdown().awaitTermination(30, TimeUnit.SECONDS);
                   } catch (Exception e) {
-                    System.err.println("Unable to shutdown server");
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, "Unable to shutdown server", e);
                   }
                 }));
     server.awaitTermination();
   }
 
   public static void main(String[] args) throws IOException, InterruptedException {
-    final TodoServer server = new TodoServer(5001);
+    final int port = Integer.parseInt(args[0]);
+    final TodoServer server = new TodoServer(port);
     server.start();
   }
 }

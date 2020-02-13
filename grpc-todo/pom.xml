@@ -12,6 +12,8 @@
         <protobuf.version>3.11.0</protobuf.version>
         <protoc.version>3.11.0</protoc.version>
         <grpc.version>1.26.0</grpc.version>
+        <!-- for exec-maven-plugin -->
+        <mainClass>grpc.todo.TodoServer</mainClass>
     </properties>
 
     <dependencies>
@@ -206,6 +208,59 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <from>
+                        <image>azul/zulu-openjdk:11.0.5</image>
+                    </from>
+                    <to>
+                        <image>localhost/grpc-todo-app</image>
+                    </to>
+                    <ports>
+                        <port>9192</port>
+                    </ports>
+                    <container>
+                        <jvmFlags>
+                            <!-- good defaults intended for Java 8 (>= 8u191) containers -->
+                            <jvmFlag>-server</jvmFlag>
+                            <jvmFlag>-Djava.awt.headless=true</jvmFlag>
+                            <jvmFlag>-XX:+UseContainerSupport</jvmFlag>
+                            <jvmFlag>-XX:+UseG1GC</jvmFlag>
+                            <jvmFlag>-XX:MaxGCPauseMillis=100</jvmFlag>
+                            <jvmFlag>-XX:+UseStringDeduplication</jvmFlag>
+                        </jvmFlags>
+                        <mainClass>grpc.todo.TodoServer</mainClass>
+                        <args>
+                            <arg>9192</arg>
+                        </args>
+                        <format>OCI</format>
+                    </container>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>dockerBuild</id>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <mainClass>${mainClass}</mainClass>
+                    <arguments>
+                        <argument>9192</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
         <extensions>

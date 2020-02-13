@@ -39,7 +39,10 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
               .withDescription(String.format("id=%d not present for updating", request.getId()))
               .asRuntimeException());
     } else {
-      map.put(request.getId(), request);
+      map.put(request.getId(), request
+              .toBuilder()
+              .setTouchedTs(System.currentTimeMillis() / 1000)
+              .build());
       responseObserver.onNext(request);
     }
     responseObserver.onCompleted();
@@ -48,7 +51,11 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   @Override
   public void createTodo(Todo request, StreamObserver<Todo> responseObserver) {
     final int id = TodoClient.randomUnsignedInt();
-    final Todo todoWithId = request.toBuilder().setId(id).build();
+    final Todo todoWithId = request
+            .toBuilder()
+            .setId(id)
+            .setTouchedTs(System.currentTimeMillis() / 1000)
+            .build();
     map.put(id, todoWithId);
     responseObserver.onNext(todoWithId);
     responseObserver.onCompleted();
@@ -70,9 +77,7 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   public void listTodos(ListTodoRequest request,
           StreamObserver<Todo> responseObserver) {
     ImmutableMap<Integer, Todo> copyMap = ImmutableMap.copyOf(map);
-    copyMap.forEach((key, value) -> {
-      responseObserver.onNext(value);
-    });
+    copyMap.forEach((key, value) -> responseObserver.onNext(value));
     responseObserver.onCompleted();
   }
 }

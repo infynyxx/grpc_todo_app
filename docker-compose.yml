@@ -1,0 +1,16 @@
+version: '3'
+services:
+  grpc_server:
+    image: localhost/grpc-todo-app
+    ports:
+      - "9192:9192"
+
+  webproxy:
+    image: localhost/grpc-webproxy
+    build:
+      context: ./
+      dockerfile: ./docker/grpcwebproxy/Dockerfile
+    environment:
+      - BACKEND_ADDRESS=grpc_server:9192
+    ports:
+      - "8080:8080"
