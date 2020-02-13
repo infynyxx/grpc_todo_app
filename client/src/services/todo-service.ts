@@ -10,8 +10,6 @@ export const getToDos = () => {
         client
             .listTodos(new ListTodoRequest())
             .on('data', (message: Todo) => {
-                console.log('message');
-                console.log(message.getContent());
                 todos.push(message);
             })
             .on('status', (status: Status) => {
