@@ -19,29 +19,6 @@ const useStyles = makeStyles({
   },
 });
 
-export interface TodoProps {
-  ts: number,
-  content: string,
-  finished: boolean
-}
-
-export class TodoRow extends React.Component<TodoProps, {}> {
-  render() {
-    const done = this.props.finished ? "FINISHED" : "NOT FINISHED";
-    return (
-      <tr>
-        <td>{ formatRelative(this.props.ts * 1000, new Date()) }</td>
-        <td>{ this.props.content }</td>
-        <td>{ done }</td>
-      </tr>
-        );
-  }
-}
-
-export interface TodoTableState {
-  todos: Array<Todo>
-}
-
 const TodoTable: React.FC<{}> = () => {
   const [todosList, setTodos] = useState<Array<Todo>>([]);
   useEffect(() => {
