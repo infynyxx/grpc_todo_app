@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { grpc } from "@improbable-eng/grpc-web";
 import { getToDos } from '../services/todo-service';
 import { Todo } from '../pb_generated/todos/todos_pb';
-import { Status } from '../pb_generated/todos/todos_pb_service';
 import formatRelative from 'date-fns/formatRelative';
 
 export interface TodoProps {

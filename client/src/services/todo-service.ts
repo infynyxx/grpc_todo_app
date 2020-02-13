@@ -1,5 +1,5 @@
 import { grpc } from "@improbable-eng/grpc-web";
-import { TodoServiceClient, ServiceError, Status } from '../pb_generated/todos/todos_pb_service';
+import { TodoServiceClient, Status } from '../pb_generated/todos/todos_pb_service';
 import { ListTodoRequest, Todo } from '../pb_generated/todos/todos_pb';
 
 export const client = new TodoServiceClient('http://localhost:8080');
