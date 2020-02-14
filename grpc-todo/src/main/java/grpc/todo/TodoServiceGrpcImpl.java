@@ -1,12 +1,8 @@
 package grpc.todo;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
+import grpc.todo.dao.TodoDAO;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
-
-import java.util.Map;
 
 import todos.v1.TodoServiceGrpc;
 import todos.v1.Todos.DeleteTodoRequest;
@@ -17,46 +13,59 @@ import todos.v1.Todos.Todo;
 
 public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
 
-  private final Map<Integer, Todo> map = Maps.newConcurrentMap();
+  private final TodoDAO todoDAO;
+
+  public TodoServiceGrpcImpl(TodoDAO todoDAO) {
+    this.todoDAO = todoDAO;
+  }
 
   @Override
   public void getTodoById(GetTodoRequest request, StreamObserver<Todo> responseObserver) {
-    final Todo todo = map.get(request.getId());
+    final grpc.todo.dao.Todo todo = todoDAO.getTodo(request.getId());
     if (todo == null) {
       responseObserver.onError(
-          Status.NOT_FOUND.withDescription("id not present for updating").asRuntimeException());
+          Status.NOT_FOUND.withDescription("id not present").asRuntimeException());
     } else {
-      responseObserver.onNext(todo);
+      final Todo todoProto = Todo
+              .newBuilder()
+              .setId(todo.id())
+              .setTouchedTs(todo.touchedTimestamp())
+              .setContent(todo.content())
+              .setFinished(todo.finished())
+              .build();
+      responseObserver.onNext(todoProto);
     }
     responseObserver.onCompleted();
   }
 
   @Override
   public void updateTodo(Todo request, StreamObserver<Todo> responseObserver) {
-    if (request.getId() <= 0 || !map.containsKey(request.getId())) {
+    if (request.getId() <= 0) {
       responseObserver.onError(
           Status.NOT_FOUND
               .withDescription(String.format("id=%d not present for updating", request.getId()))
               .asRuntimeException());
     } else {
-      map.put(request.getId(), request
+      final long ts = System.currentTimeMillis() / 1000;
+      todoDAO.update(request.getId(), request.getContent(), ts, request.getFinished());
+      responseObserver.onNext(request
               .toBuilder()
-              .setTouchedTs(System.currentTimeMillis() / 1000)
+              .setTouchedTs(ts)
               .build());
-      responseObserver.onNext(request);
     }
     responseObserver.onCompleted();
   }
 
   @Override
   public void createTodo(Todo request, StreamObserver<Todo> responseObserver) {
-    final int id = TodoClient.randomUnsignedInt();
+    // todo: check content value
+    final long ts = System.currentTimeMillis() / 1000;
+    final int id = todoDAO.insert(request.getContent(), ts);
     final Todo todoWithId = request
             .toBuilder()
             .setId(id)
-            .setTouchedTs(System.currentTimeMillis() / 1000)
+            .setTouchedTs(ts)
             .build();
-    map.put(id, todoWithId);
     responseObserver.onNext(todoWithId);
     responseObserver.onCompleted();
   }
@@ -64,20 +73,22 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   @Override
   public void deleteTodo(DeleteTodoRequest request,
           StreamObserver<DeleteTodoResponse> responseObserver) {
-    final boolean deleted = map.remove(request.getId()) != null;
-    responseObserver.onNext(DeleteTodoResponse
-            .newBuilder()
-            .setDeleted(deleted)
-            .setId(request.getId())
-            .build());
-    responseObserver.onCompleted();
+    // todo: implement delete
   }
 
   @Override
   public void listTodos(ListTodoRequest request,
           StreamObserver<Todo> responseObserver) {
-    ImmutableMap<Integer, Todo> copyMap = ImmutableMap.copyOf(map);
-    copyMap.forEach((key, value) -> responseObserver.onNext(value));
+    todoDAO.listTodos().forEach(x -> {
+      final Todo todoProto = Todo
+              .newBuilder()
+              .setId(x.id())
+              .setContent(x.content())
+              .setFinished(x.finished())
+              .setTouchedTs(x.touchedTimestamp())
+              .build();
+      responseObserver.onNext(todoProto);
+    });
     responseObserver.onCompleted();
   }
 }

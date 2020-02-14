@@ -12,6 +12,7 @@
         <protobuf.version>3.11.0</protobuf.version>
         <protoc.version>3.11.0</protoc.version>
         <grpc.version>1.26.0</grpc.version>
+        <jdbi.version>3.12.2</jdbi.version>
         <!-- for exec-maven-plugin -->
         <mainClass>grpc.todo.TodoServer</mainClass>
     </properties>
@@ -54,6 +55,26 @@
             <groupId>com.google.auto.value</groupId>
             <artifactId>auto-value-annotations</artifactId>
             <version>1.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>28.2-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-core</artifactId>
+            <version>${jdbi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdbi</groupId>
+            <artifactId>jdbi3-sqlobject</artifactId>
+            <version>${jdbi.version}</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
@@ -220,9 +241,6 @@
                     <to>
                         <image>localhost/grpc-todo-app</image>
                     </to>
-                    <ports>
-                        <port>9192</port>
-                    </ports>
                     <container>
                         <jvmFlags>
                             <!-- good defaults intended for Java 8 (>= 8u191) containers -->
@@ -237,6 +255,9 @@
                         <args>
                             <arg>9192</arg>
                         </args>
+                        <ports>
+                            <port>9192</port>
+                        </ports>
                         <format>OCI</format>
                     </container>
                 </configuration>

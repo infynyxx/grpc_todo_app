@@ -1,25 +1,36 @@
 package grpc.todo;
 
+import grpc.todo.dao.Todo;
+import grpc.todo.dao.TodoDAO;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.h2.jdbcx.JdbcConnectionPool;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.SqlObjectPlugin;
+
 
 public class TodoServer {
   private static final Logger logger = Logger.getLogger(TodoServer.class.getName());
 
   final int port;
 
-  public TodoServer(int port) {
+  final Jdbi jdbi;
+
+  public TodoServer(int port, Jdbi jdbi) {
     this.port = port;
+    this.jdbi = jdbi;
+
+    jdbi.useExtension(TodoDAO.class, TodoDAO::createTable);
   }
 
   void start() throws IOException, InterruptedException {
     final Server server = ServerBuilder
             .forPort(port)
-            .addService(new TodoServiceGrpcImpl())
+            .addService(new TodoServiceGrpcImpl(jdbi.onDemand(TodoDAO.class)))
             .build()
             .start();
     logger.info(String.format("Started server at port=%d", port));
@@ -36,9 +47,17 @@ public class TodoServer {
     server.awaitTermination();
   }
 
+
   public static void main(String[] args) throws IOException, InterruptedException {
     final int port = Integer.parseInt(args[0]);
-    final TodoServer server = new TodoServer(port);
+    final JdbcConnectionPool connectionPool = JdbcConnectionPool
+            .create("jdbc:h2:mem:todo_app", "user", "****");
+    Jdbi jdbi = Jdbi.create(connectionPool);
+    jdbi.installPlugin(new SqlObjectPlugin());
+    Runtime.getRuntime()
+            .addShutdownHook(new Thread(connectionPool::dispose));
+
+    final TodoServer server = new TodoServer(port, jdbi);
     server.start();
   }
 }
