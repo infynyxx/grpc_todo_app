@@ -38,3 +38,15 @@ export const createToDo = (content: string) => {
         });
     });
 }
+
+export const updateToDo = (todo: Todo) => {
+    return new Promise<Todo>((resolve, reject) => {
+        client.updateTodo(todo, (error, responseMessage) => {
+            if (error) {
+                reject(new Error(error.message));
+            } else {
+                resolve(responseMessage as Todo);
+            }
+        });
+    });
+};

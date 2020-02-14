@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { getToDos } from '../services/todo-service';
 import { Todo } from '../pb_generated/todos/todos_pb';
-import formatRelative from 'date-fns/formatRelative';
+import TodoSingle from './TodoSingle';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -31,26 +31,13 @@ const TodoTable: React.FC<{}> = () => {
 
   const rows = todosList.map(todo => {
       return (
-        <TableRow key={todo.getId()}>
-          <TableCell component="th" scope="row">
-            {formatRelative(todo.getTouchedTs() * 1000, new Date())}
-          </TableCell>
-          <TableCell>{todo.getContent()}</TableCell>
-          <TableCell>{todo.getFinished() ? 'Finished' : 'Not Finished'}</TableCell>
-        </TableRow>
+        <TodoSingle key={todo.getId()} todoProp={todo} />
         );
       });
   const classes = useStyles();
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Time</TableCell>
-            <TableCell>Content</TableCell>
-            <TableCell>Done?</TableCell>
-          </TableRow>
-        </TableHead>
         <TableBody>{ rows }</TableBody>
       </Table>
     </TableContainer>

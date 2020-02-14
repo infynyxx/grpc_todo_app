@@ -40,7 +40,13 @@ export const CreateTodo: React.FC<{}> = () => {
   };
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={onFormSubmit}>
-      <TextField error id="standard-basic" label="Create New" defaultValue={content} value={content} onChange={onContentChange} />
+      <TextField
+        error
+        id="standard-basic"
+        label="Create New"
+        value={content}
+        onChange={onContentChange}
+      />
     </form>
   );
 };
