@@ -5,6 +5,8 @@ My attempt to learn gRPC. This project uses [gRPC-Java](https://github.com/grpc/
 
 ![CI](https://github.com/infynyxx/grpc_todo_app/workflows/CI/badge.svg)
 
+TL;DR: `gRPC-web` is not ready for primetime. On prod environments, [recommended](https://grpc.io/docs/tutorials/basic/web/) setup is to be used via proxy service like Envoy so, `gRPC-web` can't connect directly with other gRPC backends and `gRPC-web` API does not seem to be stable as compared to other platforms.
+
 Requirements:
 -----
 
