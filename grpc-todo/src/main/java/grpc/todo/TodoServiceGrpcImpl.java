@@ -1,6 +1,6 @@
 package grpc.todo;
 
-import grpc.todo.dao.TodoDAO;
+import grpc.todo.dao.TodoDao;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
@@ -13,15 +13,15 @@ import todos.v1.Todos.Todo;
 
 public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
 
-  private final TodoDAO todoDAO;
+  private final TodoDao todoDao;
 
-  public TodoServiceGrpcImpl(TodoDAO todoDAO) {
-    this.todoDAO = todoDAO;
+  public TodoServiceGrpcImpl(TodoDao todoDao) {
+    this.todoDao = todoDao;
   }
 
   @Override
   public void getTodoById(GetTodoRequest request, StreamObserver<Todo> responseObserver) {
-    final grpc.todo.dao.Todo todo = todoDAO.getTodo(request.getId());
+    final grpc.todo.dao.Todo todo = todoDao.getTodo(request.getId());
     if (todo == null) {
       responseObserver.onError(
           Status.NOT_FOUND.withDescription("id not present").asRuntimeException());
@@ -47,7 +47,7 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
               .asRuntimeException());
     } else {
       final long ts = System.currentTimeMillis() / 1000;
-      todoDAO.update(request.getId(), request.getContent(), ts, request.getFinished());
+      todoDao.update(request.getId(), request.getContent(), ts, request.getFinished());
       responseObserver.onNext(request
               .toBuilder()
               .setTouchedTs(ts)
@@ -60,7 +60,7 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   public void createTodo(Todo request, StreamObserver<Todo> responseObserver) {
     // todo: check content value
     final long ts = System.currentTimeMillis() / 1000;
-    final int id = todoDAO.insert(request.getContent(), ts);
+    final int id = todoDao.insert(request.getContent(), ts);
     final Todo todoWithId = request
             .toBuilder()
             .setId(id)
@@ -79,7 +79,7 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   @Override
   public void listTodos(ListTodoRequest request,
           StreamObserver<Todo> responseObserver) {
-    todoDAO.listTodos().forEach(x -> {
+    todoDao.listTodos().forEach(x -> {
       final Todo todoProto = Todo
               .newBuilder()
               .setId(x.id())

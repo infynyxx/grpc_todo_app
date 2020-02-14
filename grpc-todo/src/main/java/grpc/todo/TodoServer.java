@@ -1,7 +1,6 @@
 package grpc.todo;
 
-import grpc.todo.dao.Todo;
-import grpc.todo.dao.TodoDAO;
+import grpc.todo.dao.TodoDao;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.logging.Logger;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
-
 
 public class TodoServer {
   private static final Logger logger = Logger.getLogger(TodoServer.class.getName());
@@ -23,14 +21,12 @@ public class TodoServer {
   public TodoServer(int port, Jdbi jdbi) {
     this.port = port;
     this.jdbi = jdbi;
-
-    jdbi.useExtension(TodoDAO.class, TodoDAO::createTable);
   }
 
   void start() throws IOException, InterruptedException {
     final Server server = ServerBuilder
             .forPort(port)
-            .addService(new TodoServiceGrpcImpl(jdbi.onDemand(TodoDAO.class)))
+            .addService(new TodoServiceGrpcImpl(jdbi.onDemand(TodoDao.class)))
             .build()
             .start();
     logger.info(String.format("Started server at port=%d", port));
@@ -47,6 +43,10 @@ public class TodoServer {
     server.awaitTermination();
   }
 
+  public void createTable() {
+    jdbi.useExtension(TodoDao.class, TodoDao::createTable);
+  }
+
 
   public static void main(String[] args) throws IOException, InterruptedException {
     final int port = Integer.parseInt(args[0]);
@@ -58,6 +58,7 @@ public class TodoServer {
             .addShutdownHook(new Thread(connectionPool::dispose));
 
     final TodoServer server = new TodoServer(port, jdbi);
+    server.createTable();
     server.start();
   }
 }
