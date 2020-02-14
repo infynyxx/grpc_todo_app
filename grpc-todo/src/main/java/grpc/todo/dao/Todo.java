@@ -9,7 +9,7 @@ public abstract class Todo {
   public abstract String content();
 
   public abstract boolean finished();
-  
+
   public abstract long touchedTimestamp();
 
   public static Todo create(int id, String content, boolean finished, long touchedTimestamp) {

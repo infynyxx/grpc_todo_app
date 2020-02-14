@@ -46,8 +46,7 @@ public class TodoServer {
   public void createTable() {
     jdbi.useExtension(TodoDao.class, TodoDao::createTable);
   }
-
-
+  
   public static void main(String[] args) throws IOException, InterruptedException {
     final int port = Integer.parseInt(args[0]);
     final JdbcConnectionPool connectionPool = JdbcConnectionPool
