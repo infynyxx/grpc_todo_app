@@ -29,5 +29,8 @@ public interface TodoDao {
   List<Todo> listTodos();
 
   @SqlQuery("select id, content, touched_ts, finished from todos where id = ?")
-  Todo getTodo(int id);
+  Todo getTodo(@Bind("id") int id);
+
+  @SqlUpdate("delete from todos where id=:id")
+  int deleteById(@Bind("id") int id);
 }

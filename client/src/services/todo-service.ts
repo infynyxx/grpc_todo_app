@@ -1,6 +1,6 @@
 import { grpc } from "@improbable-eng/grpc-web";
 import { TodoServiceClient, Status } from '../pb_generated/todos/todos_pb_service';
-import { ListTodoRequest, Todo } from '../pb_generated/todos/todos_pb';
+import { ListTodoRequest, Todo, DeleteTodoResponse, DeleteTodoRequest } from '../pb_generated/todos/todos_pb';
 
 export const client = new TodoServiceClient('http://localhost:8080');
 
@@ -46,6 +46,20 @@ export const updateToDo = (todo: Todo) => {
                 reject(new Error(error.message));
             } else {
                 resolve(responseMessage as Todo);
+            }
+        });
+    });
+};
+
+export const deleteTodo = (todo: Todo) => {
+    const deleteTodoRequest = new DeleteTodoRequest();
+    deleteTodoRequest.setId(todo.getId());
+    return new Promise<DeleteTodoResponse>((resolve, reject) => {
+        client.deleteTodo(deleteTodoRequest, (error, responseMessage) => {
+            if (error) {
+                reject(new Error(error.message));
+            } else {
+                resolve(responseMessage as DeleteTodoResponse);
             }
         });
     });

@@ -73,7 +73,11 @@ public class TodoServiceGrpcImpl extends TodoServiceGrpc.TodoServiceImplBase {
   @Override
   public void deleteTodo(DeleteTodoRequest request,
           StreamObserver<DeleteTodoResponse> responseObserver) {
-    // todo: implement delete
+    int rs = todoDao.deleteById(request.getId());
+    DeleteTodoResponse.Builder responseBuilder = DeleteTodoResponse.newBuilder().setId(request.getId());
+    responseBuilder.setDeleted(rs == 1);
+    responseObserver.onNext(responseBuilder.build());
+    responseObserver.onCompleted();
   }
 
   @Override
