@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import './App.css';
 import TodoTable from './components/TodoTable';
 import { CreateTodo } from './components/CreateTodo';
 import { Todo } from './pb_generated/todos/todos_pb';
