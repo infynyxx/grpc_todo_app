@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './App.css';
 import TodoTable from './components/TodoTable';
 import { CreateTodo } from './components/CreateTodo';
-
-import withStyles from '@material-ui/core/styles/withStyles';
+import { Todo } from './pb_generated/todos/todos_pb';
 import variables from './styles/variables';
 import withRoot from './withRoot';
 
@@ -17,37 +16,29 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
+      backgroundColor: variables.white,
+      overflowX: 'unset' as 'unset',
+      marginLeft: '10px',
+      height: '100%',
+      minHeight: '600px',
     },
     paper: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(1),
       margin: 'auto',
-      maxWidth: 500,
+      maxWidth: 800,
       color: theme.palette.text.secondary,
     },
   }),
 );
 
-const styles = {
-  root: {
-    flexGrow: 1,
-    backgroundColor: variables.white,
-    height: '100%',
-    minHeight: '600px',
-    width: '100%',
-    overflowX: 'unset' as 'unset',
-    marginLeft: '10px',
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  headerOffset: {
-    marginTop: '64px',
-  },
-};
 
 const App: React.FC<{}> = () => {
   const classes = useStyles();
+  const [todo, setTodo] = useState<Todo | null>(null);
+
+  const handleTodoCreated = (todo: Todo) => {
+    setTodo(todo);
+  }
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -60,8 +51,8 @@ const App: React.FC<{}> = () => {
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <CreateTodo />
-            <TodoTable />
+            <CreateTodo onTodoCreated={handleTodoCreated} />
+            <TodoTable newTodoCreated={todo} />
           </Paper>
         </Grid>
       </Grid>
@@ -69,4 +60,4 @@ const App: React.FC<{}> = () => {
   );
 }
 
-export default withRoot(withStyles(styles)(App));
+export default withRoot(App);

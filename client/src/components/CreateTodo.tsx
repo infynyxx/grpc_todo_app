@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { createToDo } from '../services/todo-service';
+import { Todo } from '../pb_generated/todos/todos_pb';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
@@ -19,7 +20,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const CreateTodo: React.FC<{}> = () => {
+interface CreateTodoProps {
+  onTodoCreated: ((todo: Todo) => void)
+}
+
+export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
   const [content, setContent] = useState<string>('');
   const classes = useStyles();
   const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,9 +36,8 @@ export const CreateTodo: React.FC<{}> = () => {
       return;
     }
     createToDo(content).then(todo => {
-      console.log('created new todo');
-      console.log(todo);
-      setContent('');
+      setContent('')
+      props.onTodoCreated(todo);
     }).catch(error => {
       alert(error);
     })
