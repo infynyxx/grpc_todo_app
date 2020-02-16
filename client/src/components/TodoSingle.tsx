@@ -10,6 +10,8 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import formatRelative from 'date-fns/formatRelative';
 
+import { AlertSnackBar } from './Alert';
+
 import { updateToDo } from '../services/todo-service';
 import { Todo } from '../pb_generated/todos/todos_pb';
 
@@ -47,6 +49,7 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
   const { todoProp } = props;
 
   const [todo, setTodo] = useState<Todo>(todoProp);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("updating todo " + todo.getId());
@@ -54,7 +57,7 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
 
     updateToDo(todo).then(newTodo => {
       setTodo(newTodo);
-    }).catch(error => alert(error));
+    }).catch(error => setErrorMessage(error.message));
   };
 
   const handleContentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,12 +76,20 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
     }
     updateToDo(todo).then(newTodo => {
       setTodo(newTodo);
-    }).catch(error => alert(error));
+    }).catch(error => setErrorMessage(error.message));
   };
 
   const handleContentDelete = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     props.onTodoDelete(todo);
+  };
+
+  const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(null);
   };
 
   const todoFormKey = `todo-single-form-${todo.getId()}`;
@@ -112,6 +123,7 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
           <DeleteIcon fontSize="small" />
         </IconButton>
       </TableCell>
+      <AlertSnackBar errorMessage={errorMessage} onClose={handleAlertClose} />
     </TableRow>
   );
 }

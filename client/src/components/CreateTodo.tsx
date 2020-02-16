@@ -4,6 +4,7 @@ import { createToDo } from '../services/todo-service';
 import { Todo } from '../pb_generated/todos/todos_pb';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { AlertSnackBar } from './Alert';
 
 export interface CreateTodoState {
   content: string
@@ -26,6 +27,8 @@ interface CreateTodoProps {
 
 export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
   const [content, setContent] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const classes = useStyles();
   const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
@@ -39,9 +42,18 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
       setContent('')
       props.onTodoCreated(todo);
     }).catch(error => {
-      alert(error);
+      setErrorMessage(error.message);
     })
   };
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(null);
+  };
+
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={onFormSubmit}>
       <TextField
@@ -51,6 +63,7 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
         value={content}
         onChange={onContentChange}
       />
+      <AlertSnackBar errorMessage={errorMessage} onClose={handleClose} />
     </form>
   );
 };

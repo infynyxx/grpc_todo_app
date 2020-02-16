@@ -14,7 +14,7 @@ export const getToDos = () => {
             })
             .on('status', (status: Status) => {
                 if (status.code !== grpc.Code.OK) {
-                    reject(new Error(status.details));
+                    reject(new Error(`Error retrieving todo items. Error code=${status.code} ${status.details}`));
                 }
             })
             .on('end', () => {
@@ -30,7 +30,7 @@ export const createToDo = (content: string) => {
     return new Promise<Todo>((resolve, reject) => {
         client.createTodo(todo, (error, responseMessage) => {
             if (error) {
-                const errorMessage = `code=${error.code} message=${error.message}`;
+                const errorMessage = `Error creating todo item. Error code=${error.code} message=${error.message}`;
                 reject(new Error(errorMessage));
             } else {
                 resolve(responseMessage as Todo);
@@ -43,7 +43,7 @@ export const updateToDo = (todo: Todo) => {
     return new Promise<Todo>((resolve, reject) => {
         client.updateTodo(todo, (error, responseMessage) => {
             if (error) {
-                reject(new Error(error.message));
+                reject(new Error(`Error updating todo item. Error code=${error.code} message=${error.message}`));
             } else {
                 resolve(responseMessage as Todo);
             }
@@ -57,7 +57,7 @@ export const deleteTodo = (todo: Todo) => {
     return new Promise<DeleteTodoResponse>((resolve, reject) => {
         client.deleteTodo(deleteTodoRequest, (error, responseMessage) => {
             if (error) {
-                reject(new Error(error.message));
+                reject(new Error(`Error deleting todo item. Error code=${error.code} message=${error.message}`));
             } else {
                 resolve(responseMessage as DeleteTodoResponse);
             }

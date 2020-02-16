@@ -9,6 +9,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
+import { AlertSnackBar } from './Alert';
 
 const useStyles = makeStyles({
   table: {
@@ -24,7 +25,6 @@ export interface TodoProp {
   touchedTimestamp: number
 }
 
-
 interface TodoTableProps {
   newTodoCreated: Todo | null
 }
@@ -33,6 +33,7 @@ interface TodoTableProps {
 const TodoTable: React.FC<TodoTableProps> = (props) => {
   const [todosList, setTodos] = useState<Array<Todo>>([]);
   const [deletedTodoId, setDeleteTodoId] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleTodoDelete = (todo: Todo) => {
     deleteTodo(todo)
@@ -42,16 +43,26 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
         console.log('deletedTodoId=' + deletedTodoId);
         if (response.getDeleted() === true) {
           setDeleteTodoId(response.getId());
+        } else {
+          setErrorMessage('Unable to delete todo item.');
         }
-      });
+      }).catch(error => setErrorMessage(error.message));
   }
+
+  const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorMessage(null);
+  };
 
   useEffect(() => {
     console.log('caling getToDos deletedTodoId=' + deletedTodoId);
     getToDos()
       .then((todos) => setTodos(todos))
       .catch(error => {
-           alert(error);
+           setErrorMessage(error.message);
        });
   }, [deletedTodoId]);
 
@@ -76,6 +87,7 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
           }
          </TableBody>
       </Table>
+      <AlertSnackBar errorMessage={errorMessage} onClose={handleAlertClose} />
     </TableContainer>
     );
 }
