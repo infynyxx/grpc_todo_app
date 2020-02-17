@@ -49,14 +49,6 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
       }).catch(error => setErrorMessage(error.message));
   }
 
-  const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(null);
-  };
-
   useEffect(() => {
     console.log('caling getToDos deletedTodoId=' + deletedTodoId);
     getToDos()
@@ -87,7 +79,7 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
           }
          </TableBody>
       </Table>
-      <AlertSnackBar errorMessage={errorMessage} onClose={handleAlertClose} />
+      <AlertSnackBar errorMessage={errorMessage} />
     </TableContainer>
     );
 }

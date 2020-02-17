@@ -84,14 +84,6 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
     props.onTodoDelete(todo);
   };
 
-  const handleAlertClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(null);
-  };
-
   const todoFormKey = `todo-single-form-${todo.getId()}`;
   const classes = useStyles();
 
@@ -123,7 +115,7 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
           <DeleteIcon fontSize="small" />
         </IconButton>
       </TableCell>
-      <AlertSnackBar errorMessage={errorMessage} onClose={handleAlertClose} />
+      <AlertSnackBar errorMessage={errorMessage} />
     </TableRow>
   );
 }

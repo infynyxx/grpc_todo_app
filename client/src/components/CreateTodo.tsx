@@ -46,14 +46,6 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
     })
   };
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setErrorMessage(null);
-  };
-
   return (
     <form className={classes.root} noValidate autoComplete="off" onSubmit={onFormSubmit}>
       <TextField
@@ -63,7 +55,7 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
         value={content}
         onChange={onContentChange}
       />
-      <AlertSnackBar errorMessage={errorMessage} onClose={handleClose} />
+      <AlertSnackBar errorMessage={errorMessage} />
     </form>
   );
 };
