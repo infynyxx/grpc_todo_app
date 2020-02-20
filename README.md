@@ -49,4 +49,5 @@ Current issues:
 * Need to write tests both on server and client sides
 * Figure out how gRPC-java handles backpressure
 * Instrumentation and observability are missing :|
+* Retryable errors in client side. As of right now, only gRPC-java has experimental support for [retries](https://grpc.github.io/grpc-java/javadoc/io/grpc/ManagedChannelBuilder.html#enableRetry--) via [service config](https://grpc.github.io/grpc-java/javadoc/io/grpc/ManagedChannelBuilder.html#defaultServiceConfig-java.util.Map-). Check this [thread](https://gitter.im/grpc/grpc?at=5e4e9c5d89f30b12651becb7) for more information.
 
