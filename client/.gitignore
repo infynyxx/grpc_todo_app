@@ -22,4 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-src/pb_generated/
+src/pb_generated/*
+!src/pb_generated/.keep
