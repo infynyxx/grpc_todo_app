@@ -45,7 +45,7 @@ If everything is working as expected, yarn should start a browser window @ http:
 Current issues:
 ---
 
-* There's a weird bug while deleting a todo item. I think it's related to how protobuf message is serialized and React's diff algorithm deals with it. Probably, better to create non protobuf object for states and props.
+* ~~There's a weird bug while deleting a todo item. I think it's related to how protobuf message is serialized and React's diff algorithm deals with it. Probably, better to create non protobuf object for states and props.~~
 * Need to write tests both on server and client sides
 * Figure out how gRPC-java handles backpressure
 * Instrumentation and observability are missing :|
