@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import TodoTable from './components/TodoTable';
 import { CreateTodo } from './components/CreateTodo';
-import { Todo } from './pb_generated/todos/todos_pb';
+import { TodoProp } from './services/todo-service';
 import variables from './styles/variables';
 import withRoot from './withRoot';
 
@@ -33,10 +33,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const App: React.FC<{}> = () => {
   const classes = useStyles();
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [todo, setTodo] = useState<TodoProp>();
 
-  const handleTodoCreated = (todo: Todo) => {
+  const handleTodoCreated = (todo: TodoProp) => {
     setTodo(todo);
+    console.log("handleTodoCreated=" + JSON.stringify(todo));
   }
   return (
     <div className={classes.root}>

@@ -4,6 +4,32 @@ import { ListTodoRequest, Todo, DeleteTodoResponse, DeleteTodoRequest } from '..
 
 export const client = new TodoServiceClient('http://localhost:8080');
 
+// better not to use protobuf objects
+export interface TodoProp {
+  id: number,
+  content: string,
+  finished: boolean,
+  touchedTimestamp: number
+}
+
+export const todoPropToProtobuf = (todoProp: TodoProp) => {
+    const todo = new Todo();
+    todo.setContent(todoProp.content);
+    todo.setId(todoProp.id);
+    todo.setFinished(todoProp.finished);
+    todo.setTouchedTs(todoProp.touchedTimestamp);
+    return todo;
+}
+
+export const todoProtobufToTodoProp = (todoPb: Todo) => {
+    return {
+        id: todoPb.getId(),
+        content: todoPb.getContent(),
+        finished: todoPb.getFinished(),
+        touchedTimestamp: todoPb.getTouchedTs()
+    };
+}
+
 export const getToDos = () => {
     return new Promise<Array<Todo>>((resolve, reject) => {
         const todos: Array<Todo> = [];

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { getToDos, deleteTodo } from '../services/todo-service';
+import { getToDos, deleteTodo, TodoProp, todoPropToProtobuf, todoProtobufToTodoProp } from '../services/todo-service';
 import { Todo, DeleteTodoResponse } from '../pb_generated/todos/todos_pb';
 import TodoSingle from './TodoSingle';
 
@@ -17,26 +17,17 @@ const useStyles = makeStyles({
   },
 });
 
-// better not to use protobuf objects
-export interface TodoProp {
-  id: number,
-  content: string,
-  finished: boolean,
-  touchedTimestamp: number
-}
-
 interface TodoTableProps {
-  newTodoCreated: Todo | null
+  newTodoCreated?: TodoProp
 }
-
 
 const TodoTable: React.FC<TodoTableProps> = (props) => {
   const [todosList, setTodos] = useState<Array<Todo>>([]);
   const [deletedTodoId, setDeleteTodoId] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleTodoDelete = (todo: Todo) => {
-    deleteTodo(todo)
+  const handleTodoDelete = (todoProp: TodoProp) => {
+    deleteTodo(todoPropToProtobuf(todoProp))
       .then((response: DeleteTodoResponse) => {
         if (response.getDeleted() === true) {
           setDeleteTodoId(response.getId());
@@ -52,11 +43,15 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
       .catch(error => {
            setErrorMessage(error.message);
        });
-  }, [deletedTodoId]);
+  }, [deletedTodoId, props.newTodoCreated]);
 
   const rows = todosList.map(todo => {
       return (
-        <TodoSingle key={todo.getId()} todoProp={todo} onTodoDelete={handleTodoDelete} />
+        <TodoSingle
+          key={todo.getId()}
+          todoProp={todoProtobufToTodoProp(todo)}
+          onTodoDelete={handleTodoDelete}
+        />
         );
       });
 
@@ -66,13 +61,6 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
       <Table className={classes.table} aria-label="a dense table">
         <TableBody>
           { rows }
-          { props.newTodoCreated &&
-            <TodoSingle
-              key={props.newTodoCreated.getId()}
-              todoProp={props.newTodoCreated}
-              onTodoDelete={handleTodoDelete}
-            />
-          }
          </TableBody>
       </Table>
       <AlertSnackBar errorMessage={errorMessage} />

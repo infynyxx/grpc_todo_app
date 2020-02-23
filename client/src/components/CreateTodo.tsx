@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { createToDo } from '../services/todo-service';
-import { Todo } from '../pb_generated/todos/todos_pb';
+import { createToDo, TodoProp, todoProtobufToTodoProp } from '../services/todo-service';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { AlertSnackBar } from './Alert';
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface CreateTodoProps {
-  onTodoCreated: ((todo: Todo) => void)
+  onTodoCreated: ((todo: TodoProp) => void)
 }
 
 export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
@@ -40,7 +39,7 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
     }
     createToDo(content).then(todo => {
       setContent('')
-      props.onTodoCreated(todo);
+      props.onTodoCreated(todoProtobufToTodoProp(todo));
     }).catch(error => {
       setErrorMessage(error.message);
     })

@@ -12,8 +12,7 @@ import formatRelative from 'date-fns/formatRelative';
 
 import { AlertSnackBar } from './Alert';
 
-import { updateToDo } from '../services/todo-service';
-import { Todo } from '../pb_generated/todos/todos_pb';
+import { updateToDo, TodoProp, todoProtobufToTodoProp, todoPropToProtobuf } from '../services/todo-service';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,32 +29,23 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-
 interface TodoProps {
-  todoProp: Todo,
-  onTodoDelete: ((todo: Todo) => void),
+  todoProp: TodoProp,
+  onTodoDelete: ((todo: TodoProp) => void),
 }
-
-const createTodo = (todo: Todo) => {
-  const newTodo = new Todo();
-  newTodo.setId(todo.getId());
-  newTodo.setContent(todo.getContent());
-  newTodo.setTouchedTs(todo.getTouchedTs());
-  newTodo.setFinished(todo.getFinished());
-  return newTodo;
-};
 
 const TodoSingle: React.FC<TodoProps> = (props) => {
   const { todoProp } = props;
 
-  const [todo, setTodo] = useState<Todo>(todoProp);
+  const [todo, setTodo] = useState<TodoProp>(todoProp);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    todo.setFinished(event.target.checked);
+    const todoPb = todoPropToProtobuf(todo);
+    todoPb.setFinished(event.target.checked);
 
-    updateToDo(todo).then(newTodo => {
-      setTodo(newTodo);
+    updateToDo(todoPb).then(newTodo => {
+      setTodo(todoProtobufToTodoProp(newTodo));
     }).catch(error => setErrorMessage(error.message));
   };
 
@@ -63,17 +53,17 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
     if (event.target.value.trim() === '') {
       return;
     }
-    todo.setContent(event.target.value);
-    setTodo(createTodo(todo));
+    todo.content = event.target.value;
+    setTodo(todo);
   };
 
   const handleContentUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (todo.getContent().trim() === '') {
+    if (todo.content.trim() === '') {
       return;
     }
-    updateToDo(todo).then(newTodo => {
-      setTodo(newTodo);
+    updateToDo(todoPropToProtobuf(todo)).then(newTodo => {
+      setTodo(todoProtobufToTodoProp(newTodo));
     }).catch(error => setErrorMessage(error.message));
   };
 
@@ -82,27 +72,27 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
     props.onTodoDelete(todo);
   };
 
-  const todoFormKey = `todo-single-form-${todo.getId()}`;
+  const todoFormKey = `todo-single-form-${todo.id}`;
   const classes = useStyles();
 
   return (
-    <TableRow key={todo.getId()}>
+    <TableRow key={todo.id}>
       <TableCell component="th" scope="row">
-        {formatRelative(todo.getTouchedTs() * 1000, new Date())}
+        {formatRelative(todo.touchedTimestamp * 1000, new Date())}
       </TableCell>
       <TableCell>
         <form noValidate autoComplete="off" onSubmit={handleContentUpdate} key={todoFormKey}>
           <TextField
             required
             size="small"
-            value={todo.getContent()}
+            value={todo.content}
             onChange={handleContentChange}
           />
         </form>
       </TableCell>
       <TableCell className={classes.deleteCell}>
         <Checkbox
-          checked={todo.getFinished()}
+          checked={todo.finished}
           onChange={handleCheckboxChange}
           value="primary"
           inputProps={{ 'aria-label': 'primary checkbox' }}
