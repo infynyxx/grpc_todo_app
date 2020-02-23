@@ -37,7 +37,6 @@ const App: React.FC<{}> = () => {
 
   const handleTodoCreated = (todo: TodoProp) => {
     setTodo(todo);
-    console.log("handleTodoCreated=" + JSON.stringify(todo));
   }
   return (
     <div className={classes.root}>
