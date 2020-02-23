@@ -53,8 +53,9 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
     if (event.target.value.trim() === '') {
       return;
     }
-    todo.content = event.target.value;
-    setTodo(todo);
+    const todoCopy = { ...todo };
+    todoCopy.content = event.target.value;
+    setTodo(todoCopy);
   };
 
   const handleContentUpdate = (event: React.FormEvent<HTMLFormElement>) => {
