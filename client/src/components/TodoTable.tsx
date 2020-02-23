@@ -38,9 +38,6 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
   const handleTodoDelete = (todo: Todo) => {
     deleteTodo(todo)
       .then((response: DeleteTodoResponse) => {
-        console.log('DeleteTodoResponse');
-        console.log(response.getDeleted() + " " + response.getId());
-        console.log('deletedTodoId=' + deletedTodoId);
         if (response.getDeleted() === true) {
           setDeleteTodoId(response.getId());
         } else {
@@ -50,7 +47,6 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
   }
 
   useEffect(() => {
-    console.log('caling getToDos deletedTodoId=' + deletedTodoId);
     getToDos()
       .then((todos) => setTodos(todos))
       .catch(error => {

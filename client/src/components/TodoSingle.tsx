@@ -52,7 +52,6 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("updating todo " + todo.getId());
     todo.setFinished(event.target.checked);
 
     updateToDo(todo).then(newTodo => {
@@ -70,7 +69,6 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
 
   const handleContentUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(todo.getContent());
     if (todo.getContent().trim() === '') {
       return;
     }
