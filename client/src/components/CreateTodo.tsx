@@ -26,7 +26,7 @@ interface CreateTodoProps {
 
 export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
   const [content, setContent] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const classes = useStyles();
   const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {

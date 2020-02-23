@@ -38,7 +38,7 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
   const { todoProp } = props;
 
   const [todo, setTodo] = useState<TodoProp>(todoProp);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const todoPb = todoPropToProtobuf(todo);

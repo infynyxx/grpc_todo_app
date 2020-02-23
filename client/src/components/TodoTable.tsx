@@ -24,7 +24,7 @@ interface TodoTableProps {
 const TodoTable: React.FC<TodoTableProps> = (props) => {
   const [todosList, setTodos] = useState<Array<Todo>>([]);
   const [deletedTodoId, setDeleteTodoId] = useState<number>(0);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const handleTodoDelete = (todoProp: TodoProp) => {
     deleteTodo(todoPropToProtobuf(todoProp))

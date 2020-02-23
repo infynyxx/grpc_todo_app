@@ -8,24 +8,15 @@ const Alert: React.FC<AlertProps> = (props) => {
 }
 
 interface AlertSnackBarProps {
-  errorMessage: string | null
+  errorMessage?: string
 }
 
 export const AlertSnackBar: React.FC<AlertProps & AlertSnackBarProps> = (props) => {
-  const { errorMessage, onClose } = props;
-  const [error, setError] = useState(errorMessage);
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setError(null);
-  };
+  const { errorMessage } = props;
   return (
-    <Snackbar open={errorMessage !== null} autoHideDuration={6000} onClose={handleClose}>
-      <Alert onClose={onClose} severity="error">
-        {error}
+    <Snackbar open={errorMessage !== undefined} autoHideDuration={6000}>
+      <Alert severity="error">
+        {errorMessage}
       </Alert>
     </Snackbar>
   );
