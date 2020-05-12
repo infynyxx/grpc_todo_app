@@ -5,9 +5,9 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
 
-    steps:        
+    steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-java@v1
       with:
@@ -30,7 +30,7 @@ jobs:
       run: mvn clean package --file grpc-todo/pom.xml
 
     - name: Install Protoc
-      uses: Arduino/actions/setup-protoc@master
+      uses: arduino/setup-protoc@master
       with:
         version: '3.11.x'
 
