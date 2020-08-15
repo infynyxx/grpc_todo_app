@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, StrictMode } from 'react';
 
 import TodoTable from './components/TodoTable';
 import { CreateTodo } from './components/CreateTodo';
@@ -40,21 +40,23 @@ const App: React.FC<{}> = () => {
   }
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Typography variant="h3" component="h3">
-              GRPC Todo App
+      <StrictMode>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Typography variant="h3" component="h3">
+                GRPC Todo App
             </Typography>
-          </Paper>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <CreateTodo onTodoCreated={handleTodoCreated} />
+              <TodoTable newTodoCreated={todo} />
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <CreateTodo onTodoCreated={handleTodoCreated} />
-            <TodoTable newTodoCreated={todo} />
-          </Paper>
-        </Grid>
-      </Grid>
+      </StrictMode>
     </div>
   );
 }
