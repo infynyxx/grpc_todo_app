@@ -5,3 +5,5 @@ surefire-reports/
 .idea/
 *.class
 *.jar
+*.classpath
+*.factorypath
