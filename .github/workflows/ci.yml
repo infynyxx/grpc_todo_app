@@ -50,5 +50,5 @@ jobs:
 
     - uses: actions/setup-node@v1
       with:
-        node-version: '12.x'
+        node-version: '16.13.x'
     - run: cd client && yarn install && yarn build
