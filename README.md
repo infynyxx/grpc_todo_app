@@ -1,7 +1,7 @@
 # grpc_todo_app
 Same old todo app but with shiny new GRPC
 
-My attempt to learn gRPC. This project uses [gRPC-Java](https://github.com/grpc/grpc-java) as backend and React + TypeScript as frontend while using [Enviy proxy](https://www.envoyproxy.io/docs/envoy/v1.21.0/) for interacting with backend. I tried using [grpc-web](https://github.com/grpc/grpc-web/) but I could not make it work with TypeScript `¯\_(ツ)_/¯` hence using one from https://github.com/improbable-eng/grpc-web.
+My attempt to learn gRPC. This project uses [gRPC-Java](https://github.com/grpc/grpc-java) as backend and React + TypeScript as frontend while using [Envoy proxy](https://www.envoyproxy.io/docs/envoy/v1.21.0/) for interacting with backend. I tried using [grpc-web](https://github.com/grpc/grpc-web/) but I could not make it work with TypeScript `¯\_(ツ)_/¯` hence using one from https://github.com/improbable-eng/grpc-web.
 
 ![CI](https://github.com/infynyxx/grpc_todo_app/workflows/CI/badge.svg)
 
