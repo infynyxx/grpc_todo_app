@@ -1,11 +1,9 @@
 # grpc_todo_app
 Same old todo app but with shiny new GRPC
 
-My attempt to learn gRPC. This project uses [gRPC-Java](https://github.com/grpc/grpc-java) as backend and React + TypeScript as frontend while using [gRPC web proxy](https://github.com/improbable-eng/grpc-web/tree/master/go/grpcwebproxy) for interacting with backend. I tried using [grpc-web](https://github.com/grpc/grpc-web/) but I could not make it work with TypeScript `¯\_(ツ)_/¯` hence using one from https://github.com/improbable-eng/grpc-web.
+My attempt to learn gRPC. This project uses [gRPC-Java](https://github.com/grpc/grpc-java) as backend and React + TypeScript as frontend while using [Enviy proxy](https://www.envoyproxy.io/docs/envoy/v1.21.0/) for interacting with backend. I tried using [grpc-web](https://github.com/grpc/grpc-web/) but I could not make it work with TypeScript `¯\_(ツ)_/¯` hence using one from https://github.com/improbable-eng/grpc-web.
 
 ![CI](https://github.com/infynyxx/grpc_todo_app/workflows/CI/badge.svg)
-
-TL;DR: `gRPC-web` is not ready for primetime. On prod environments, [recommended](https://grpc.io/docs/tutorials/basic/web/) setup is to be used via proxy service like Envoy so, `gRPC-web` can't connect directly with other gRPC backends and `gRPC-web` API does not seem to be stable as compared to other platforms.
 
 Requirements:
 -----
