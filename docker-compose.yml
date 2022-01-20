@@ -5,12 +5,10 @@ services:
     ports:
       - "9192:9192"
 
-  webproxy:
-    image: localhost/grpc-webproxy
-    build:
-      context: ./
-      dockerfile: ./docker/grpcwebproxy/Dockerfile
-    environment:
-      - BACKEND_ADDRESS=grpc_server:9192
+  envoy:
+    image: envoyproxy/envoy:v1.21.0
     ports:
-      - "8080:8080"
+      - "8081:8081"
+      - "9901:9901"
+    volumes:
+      - ./docker/envoy.yaml:/etc/envoy/envoy.yaml
