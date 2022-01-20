@@ -1,3 +1,4 @@
+# https://github.com/grpc/grpc-web/blob/master/net/grpc/gateway/examples/echo/envoy.yaml
 admin:
   access_log_path: /tmp/admin_access.log
   address:
