@@ -253,7 +253,7 @@
                 <version>3.2.0</version>
                 <configuration>
                     <from>
-                        <image>azul/zulu-openjdk:11.0.9</image>
+                        <image>azul/zulu-openjdk:17.0.2</image>
                     </from>
                     <to>
                         <image>localhost/grpc-todo-app</image>
