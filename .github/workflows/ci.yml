@@ -30,9 +30,9 @@ jobs:
       run: mvn clean package --file grpc-todo/pom.xml
 
     - name: Install Protoc
-      uses: arduino/setup-protoc@master
+      uses: arduino/setup-protoc@v2
       with:
-        version: '3.19.x'
+        version: "23.2"
 
     - name: Print protoc version
       run: protoc --version
