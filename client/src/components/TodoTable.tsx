@@ -39,30 +39,30 @@ const TodoTable: React.FC<TodoTableProps> = (props) => {
     getToDos()
       .then((todos) => setTodos(todos))
       .catch(error => {
-           setErrorMessage(error.message);
-       });
+        setErrorMessage(error.message);
+      });
   }, [deletedTodoId, props.newTodoCreated]);
 
   const rows = todosList.map(todo => {
-      return (
-        <TodoSingle
-          key={todo.getId()}
-          todoProp={todoProtobufToTodoProp(todo)}
-          onTodoDelete={handleTodoDelete}
-        />
-        );
-      });
+    return (
+      <TodoSingle
+        key={todo.getId()}
+        todoProp={todoProtobufToTodoProp(todo)}
+        onTodoDelete={handleTodoDelete}
+      />
+    );
+  });
 
   return (
     <TableContainer component={Paper}>
       <StyledTable aria-label="a dense table">
         <TableBody>
-          { rows }
-         </TableBody>
+          {rows}
+        </TableBody>
       </StyledTable>
       <AlertSnackBar errorMessage={errorMessage} />
     </TableContainer>
-    );
+  );
 }
 
 export default TodoTable;

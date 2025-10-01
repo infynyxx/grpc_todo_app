@@ -6,10 +6,10 @@ export const client = new TodoServiceClient(import.meta.env.VITE_TODO_SERVICE_CL
 
 // better not to use protobuf objects
 export interface TodoProp {
-  id: number,
-  content: string,
-  finished: boolean,
-  touchedTimestamp: number
+    id: number,
+    content: string,
+    finished: boolean,
+    touchedTimestamp: number
 }
 
 export const todoPropToProtobuf = (todoProp: TodoProp) => {

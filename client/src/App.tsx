@@ -42,7 +42,7 @@ const App: React.FC<{}> = () => {
             <StyledPaper>
               <Typography variant="h3" component="h3">
                 GRPC Todo App
-            </Typography>
+              </Typography>
             </StyledPaper>
           </Grid>
           <Grid item xs={12}>

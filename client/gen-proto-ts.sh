@@ -17,7 +17,7 @@ do
     sed -i '' 's/var \([^=]*\) = require(\([^)]*\));/import * as \1 from \2;/g' "${f}"
     # Fix specific grpc import
     sed -i '' 's/var grpc = require("@improbable-eng\/grpc-web").grpc;/import { grpc } from "@improbable-eng\/grpc-web";/g' "${f}"
-    
+
     # Handle protobuf files specifically
     if [[ "$f" == *"todos_pb.js" ]]; then
         # Replace goog.object.extend(exports, proto.todos.v1); with specific exports
