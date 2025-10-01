@@ -22,9 +22,9 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Install Protoc
-      uses: arduino/setup-protoc@v1
+      uses: arduino/setup-protoc@v3
       with:
-        version: "3.15"
+        version: "29.3"
 
     - name: maven version
       run: mvn -version
