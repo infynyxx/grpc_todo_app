@@ -1,12 +1,12 @@
 import React, { useState, MouseEvent } from 'react';
 
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import Checkbox from '@material-ui/core/Checkbox';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { styled } from '@mui/material/styles';
 
 import formatRelative from 'date-fns/formatRelative';
 
@@ -14,20 +14,14 @@ import { AlertSnackBar } from './Alert';
 
 import { updateToDo, TodoProp, todoProtobufToTodoProp, todoPropToProtobuf } from '../services/todo-service';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    margin: {
-      margin: theme.spacing(1),
-    },
-    extendedIcon: {
-      marginRight: theme.spacing(1),
-    },
-    deleteCell: {
-      width: '20px',
-      paddingRight: '1px',
-    },
-  }),
-);
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  margin: theme.spacing(1),
+}));
+
+const StyledDeleteCell = styled(TableCell)(({ theme }) => ({
+  width: '20px',
+  paddingRight: '1px',
+}));
 
 interface TodoProps {
   todoProp: TodoProp,
@@ -74,7 +68,6 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
   };
 
   const todoFormKey = `todo-single-form-${todo.id}`;
-  const classes = useStyles();
 
   return (
     <TableRow key={todo.id}>
@@ -91,19 +84,19 @@ const TodoSingle: React.FC<TodoProps> = (props) => {
           />
         </form>
       </TableCell>
-      <TableCell className={classes.deleteCell}>
+      <StyledDeleteCell>
         <Checkbox
           checked={todo.finished}
           onChange={handleCheckboxChange}
           value="primary"
           inputProps={{ 'aria-label': 'primary checkbox' }}
         />
-      </TableCell>
-      <TableCell align="right" size="small" className={classes.deleteCell}>
-        <IconButton aria-label="delete" className={classes.margin} onClick={handleContentDelete}>
+      </StyledDeleteCell>
+      <StyledDeleteCell align="right" size="small">
+        <IconButton aria-label="delete" sx={{ margin: 1 }} onClick={handleContentDelete}>
           <DeleteIcon fontSize="small" />
         </IconButton>
-      </TableCell>
+      </StyledDeleteCell>
       <AlertSnackBar errorMessage={errorMessage} />
     </TableRow>
   );

@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 
 import { createToDo, TodoProp, todoProtobufToTodoProp } from '../services/todo-service';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
 import { AlertSnackBar } from './Alert';
+import Box from '@mui/material/Box';
 
 export interface CreateTodoState {
   content: string
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-        width: 200,
-      },
-    },
-  }),
-);
+const StyledForm = styled(Box)(({ theme }) => ({
+  '& > *': {
+    margin: theme.spacing(1),
+    width: 200,
+  },
+}));
 
 interface CreateTodoProps {
   onTodoCreated: ((todo: TodoProp) => void)
@@ -28,7 +25,6 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
   const [content, setContent] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
-  const classes = useStyles();
   const onContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContent(e.target.value);
   };
@@ -46,15 +42,16 @@ export const CreateTodo: React.FC<CreateTodoProps> = (props) => {
   };
 
   return (
-    <form className={classes.root} noValidate autoComplete="off" onSubmit={onFormSubmit}>
+    <StyledForm component="form" noValidate autoComplete="off" onSubmit={onFormSubmit}>
       <TextField
-        error
         id="standard-basic"
         label="Create New"
         value={content}
         onChange={onContentChange}
+        variant="outlined"
+        size="small"
       />
       <AlertSnackBar errorMessage={errorMessage} />
-    </form>
+    </StyledForm>
   );
 };
