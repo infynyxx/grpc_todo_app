@@ -22,6 +22,23 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Force highest version of gson to resolve version conflicts -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.11.0</version>
+            </dependency>
+            <!-- Force highest version of j2objc-annotations to resolve version conflicts -->
+            <dependency>
+                <groupId>com.google.j2objc</groupId>
+                <artifactId>j2objc-annotations</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>io.grpc</groupId>
@@ -64,7 +81,6 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.10.1</version> <!-- prevent downgrade via protobuf-java-util -->
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
