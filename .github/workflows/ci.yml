@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
-        java-version: '17.0.2'
+        java-version: '17'
+        distribution: 'temurin'
 
     - uses: actions/cache@v4
       with:
@@ -21,9 +22,9 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Install Protoc
-      uses: arduino/setup-protoc@v1
+      uses: arduino/setup-protoc@v3
       with:
-        version: "3.15"
+        version: "29.3"
 
     - name: maven version
       run: mvn -version
@@ -37,18 +38,21 @@ jobs:
     - name: Print protoc version
       run: protoc --version
 
-    - name: Get yarn cache
-      id: yarn-cache
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      shell: bash
+      run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
 
     - uses: actions/cache@v4
       with:
-        path: ${{ steps.yarn-cache.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-node-
 
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v4
       with:
-        node-version: '16.13.x'
-    - run: cd client && yarn install && yarn build
+        node-version: '20.x'
+        cache: 'npm'
+        cache-dependency-path: 'client/package-lock.json'
+    - run: cd client && npm ci && npm run build

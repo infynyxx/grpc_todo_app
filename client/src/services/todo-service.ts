@@ -2,14 +2,14 @@ import { grpc } from "@improbable-eng/grpc-web";
 import { TodoServiceClient, Status } from '../pb_generated/todos/todos_pb_service';
 import { ListTodoRequest, Todo, DeleteTodoResponse, DeleteTodoRequest } from '../pb_generated/todos/todos_pb';
 
-export const client = new TodoServiceClient(process.env.REACT_APP_TODO_SERVICE_CLIENT_URL);
+export const client = new TodoServiceClient(import.meta.env.VITE_TODO_SERVICE_CLIENT_URL || 'http://localhost:8080');
 
 // better not to use protobuf objects
 export interface TodoProp {
-  id: number,
-  content: string,
-  finished: boolean,
-  touchedTimestamp: number
+    id: number,
+    content: string,
+    finished: boolean,
+    touchedTimestamp: number
 }
 
 export const todoPropToProtobuf = (todoProp: TodoProp) => {
